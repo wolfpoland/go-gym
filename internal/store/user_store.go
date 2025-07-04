@@ -96,7 +96,7 @@ func (u *PostgresUserStore) GetUserByEmail(email string) (*User, error) {
 		&user.ID,
 		&user.Username,
 		&user.Email,
-		&user.PasswordHash,
+		&user.PasswordHash.hash,
 		&user.Bio,
 	)
 	if err == sql.ErrNoRows {
