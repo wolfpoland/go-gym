@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go-server/internal/api"
 	"go-server/internal/store"
+	"go-server/middleware"
 	"go-server/migrations"
 	"log"
 	"net/http"
@@ -16,6 +17,7 @@ type Application struct {
 	WorkoutHandler *api.WorkoutHandler
 	UserHandler    *api.UserHandler
 	TokenHandler   *api.TokensHandler
+	UserMiddleware middleware.UserMiddleware
 	DB             *sql.DB
 }
 
@@ -35,6 +37,7 @@ func NewApplication() (*Application, error) {
 	workoutStore := store.NewPostgresWorkoutStore(pgDB)
 	userStore := store.NewPostgresUserStore(pgDB)
 	tokenStore := store.NewPostgresTokenStore(pgDB)
+	userMiddleware := middleware.UserMiddleware{UserStore: userStore}
 
 	workoutHandler := api.NewWorkoutHandler(workoutStore, logger)
 	userHandler := api.NewUserHandler(userStore, logger)
@@ -46,6 +49,7 @@ func NewApplication() (*Application, error) {
 		WorkoutHandler: workoutHandler,
 		UserHandler:    userHandler,
 		TokenHandler:   tokenHandler,
+		UserMiddleware: userMiddleware,
 	}
 
 	return app, nil

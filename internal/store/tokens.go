@@ -2,7 +2,6 @@ package store
 
 import (
 	"database/sql"
-	"fmt"
 	"go-server/internal/tokens"
 	"time"
 )
